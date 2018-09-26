@@ -58,6 +58,7 @@ def fetch_score(team_id):
         print("Error encountered, returning 0 for score")
         return 0
 
+#def fetch_goal_scorer(game_url)
 
 def check_season():
     """ Function to check if in season. Returns True if in season, False in off season. """

@@ -126,14 +126,14 @@ if __name__ == "__main__":
                             
 
                     else:
-                        print("Game Over!")
+                        print("Game Over! Sleeping until tomorrow.")
                         old_score = 0 # Reset for new game
                         sleep("day")  # sleep till tomorrow
                 else:
-                    print("No Game Today!")
+                    print("No Game Today! Sleeping until tomorrow.")
                     sleep("day")  # sleep till tomorrow
             else:
-                print("OFF SEASON!")
+                print("OFF SEASON! Sleeping until next season.")
                 sleep("season")  # sleep till next season
 
     except KeyboardInterrupt:

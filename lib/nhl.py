@@ -2,7 +2,7 @@ import requests
 import datetime
 
 NHL_API_URL = "http://statsapi.web.nhl.com/api/v1/"
-
+NHL_URL = "http://statsapi.web.nhl.com"
 
 def get_teams():
     """ Function to get a list of all the teams name"""
@@ -52,7 +52,7 @@ def fetch_score(team_id):
             score = int(score['dates'][0]['games'][0]['teams']['home']['score'])
         else:
             score = int(score['dates'][0]['games'][0]['teams']['away']['score'])
-        fetch_goal_scorer(url)
+        fetch_goal_scorer(url, score)
         # Print score for test
         print("Score: {0} Time: {1}:{2}:{3}".format(score, now.hour, now.minute, now.second))
         return score
@@ -60,14 +60,19 @@ def fetch_score(team_id):
         print("Error encountered, returning 0 for score")
         return 0
 
-def fetch_goal_scorer(game_url):
+def fetch_goal_scorer(game_url, score):
     """ Function to determine who scored last goal. """
+    scorer = None
 
-    live_link = game_url['dates'][0]['games'][0]['link'][0]
-    live_url = '{0}{1}'.format(NHL_API_URL, live_link)
-    import pdb; pdb.set_trace()
-    
-    return 0
+    live_link = requests.get(game_url).json()['dates'][0]['games'][0]['link']
+    live_url = '{0}{1}'.format(NHL_URL, live_link)
+    liveFeed = requests.get(live_url).json()
+    #import pdb; pdb.set_trace();
+    if score > 0:
+        playNumber = int(liveFeed['liveData']['plays']['scoringPlays'][score-1])
+        scorer = liveFeed['liveData']['plays']['allPlays'][playNumber]['players'][0]['player']['fullName']
+
+    return scorer
 
 def check_season():
     """ Function to check if in season. Returns True if in season, False in off season. """

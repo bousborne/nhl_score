@@ -58,9 +58,9 @@ def setup_nhl():
     except IndexError:
         team_id = ""
     if team_id == "":
-        team = input("Enter team you want to setup (without city) (Default: Canadiens) \n")
+        team = input("Enter team you want to setup (without city) (Default: Capitals) \n")
         if team == "":
-            team = "Canadiens"
+            team = "Capitals"
         else:
             team = team.title()
         # query the api to get the ID
@@ -118,6 +118,7 @@ if __name__ == "__main__":
                         if new_score != old_score:
                             time.sleep(delay) 
                             if new_score > old_score:
+                                #determine who scored here
                                 # save new score
                                 print("GOAL!")
                                 # activate_goal_light()

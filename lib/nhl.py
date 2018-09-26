@@ -42,15 +42,17 @@ def fetch_score(team_id):
 
     # Set URL depending on team selected
     url = '{0}schedule?teamId={1}'.format(NHL_API_URL, team_id)
+    print('fetch score url:', url)
     # Avoid request errors (might still not catch errors)
     try:
         score = requests.get(url)
         score = score.json()
+        #import pdb; pdb.set_trace();
         if int(team_id) == int(score['dates'][0]['games'][0]['teams']['home']['team']['id']):
             score = int(score['dates'][0]['games'][0]['teams']['home']['score'])
         else:
             score = int(score['dates'][0]['games'][0]['teams']['away']['score'])
-
+        fetch_goal_scorer(url)
         # Print score for test
         print("Score: {0} Time: {1}:{2}:{3}".format(score, now.hour, now.minute, now.second))
         return score
@@ -58,7 +60,14 @@ def fetch_score(team_id):
         print("Error encountered, returning 0 for score")
         return 0
 
-#def fetch_goal_scorer(game_url)
+def fetch_goal_scorer(game_url):
+    """ Function to determine who scored last goal. """
+
+    live_link = game_url['dates'][0]['games'][0]['link'][0]
+    live_url = '{0}{1}'.format(NHL_API_URL, live_link)
+    import pdb; pdb.set_trace()
+    
+    return 0
 
 def check_season():
     """ Function to check if in season. Returns True if in season, False in off season. """

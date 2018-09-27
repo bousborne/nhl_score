@@ -1,8 +1,10 @@
 import requests
 import datetime
 
+# https://gitlab.com/dword4/nhlapi/blob/master
 NHL_API_URL = "http://statsapi.web.nhl.com/api/v1/"
 NHL_URL = "http://statsapi.web.nhl.com"
+OVECHKIN = "https://statsapi.web.nhl.com/api/v1/people/8471214"
 
 def get_teams():
     """ Function to get a list of all the teams name"""
@@ -120,3 +122,65 @@ def check_game_end(team_id):
         # Return False to allow for another pass for test
         print("Error encountered, returning False for check_game_end")
         return False
+
+
+def check_ovechkin_season_goals():
+
+    url = '{0}/stats?stats=statsSingleSeason&season=20172018'.format(OVECHKIN)
+    #import pdb; pdb.set_trace();
+    try:
+        goals = requests.get(url)
+        goals = goals.json()
+        goals = goals['stats'][0]['splits'][0]['stat']['goals']
+        return goals
+    except requests.exceptions.RequestException:
+        # Return False to allow for another pass for test
+        print("Error encountered, returning False for check_game_end")
+        return False
+
+# Returns number of goals ovechkin is on pace for in 2017-2018 season. Must be in season to work.
+def check_ovechkin_on_pace_regular_season_goals():
+    url = '{0}/stats?stats=onPaceRegularSeason&season=20172018'.format(OVECHKIN)
+        #import pdb; pdb.set_trace();
+    try:
+        goals = requests.get(url)
+        goals = goals.json()
+        goals = goals['stats'][0]['splits'][0]['stat']['goals']
+        return goals
+    except requests.exceptions.RequestException:
+        # Return False to allow for another pass for test
+        print("Error encountered, returning False")
+        return False
+
+def check_ovechkin_career_goals():
+    import datetime
+
+    if datetime.datetime.today().month > 6:
+        season_year_end = datetime.datetime.today().year + 1
+        season_year_begin = datetime.datetime.today().year
+    else:
+        season_year_end = datetime.datetime.today().year
+        season_year_begin = datetime.datetime.today().year - 1
+
+    print(season_year_end);
+    print(season_year_begin);
+    import pdb; pdb.set_trace();
+    while season_year_begin >= 2004:
+        curr_season_modifier = str(season_year_begin) + (str(season_year_end))
+        print(curr_season_modifier)
+        url = '{0}/stats?stats=onPaceRegularSeason&season={1}'.format(OVECHKIN, curr_season_modifier)
+
+        try:
+            goals = requests.get(url)
+            goals = goals.json()
+            goals = goals['stats'][0]['splits'][0]['stat']['goals']
+
+            print(curr_season_modifier, goals)
+        except requests.exceptions.RequestException:
+            # Return False to allow for another pass for test
+            print("Error encountered, returning False")
+            return False
+        --season_year_begin
+        career_goals = career_goals + goals
+
+    return goals

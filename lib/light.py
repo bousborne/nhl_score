@@ -28,7 +28,7 @@ def activate_goal_light(gpio_event_var=0):
     songrandom = random.randint(1, 3) #Set random numbers depending on number of audio clips available
     # Prepare commande to play sound (change file name if needed)
     pygame.mixer.init()
-    pygame.mixer.music.load('/home/beno/nhl_goal_light/audio/goal_horn_{SongId}.mp3'.format(SongId=str(songrandom)))
+    pygame.mixer.music.load('audio/goal_horn_{SongId}.mp3'.format(SongId=str(songrandom)))
     pygame.mixer.music.play()
     GPIO.output(7, GPIO.HIGH) #Turn on light, active low relay, so on is low
     while pygame.mixer.music.get_busy() == True:
